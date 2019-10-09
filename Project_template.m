@@ -1,29 +1,64 @@
 cgmSeries = csvread("./DataFolder/CGMSeriesLunchPat1.csv", 1, 0);
 cgmTime = csvread("./DataFolder/CGMDatenumLunchPat1.csv", 1, 0);
 
-featureMatrix = [];
+% plot(cgmTime(1, :), cgmSeries(1, :));
 
-for rowIndex = 1:size(cgmSeries, 1)
-%     disp(cgmSeries(rowIndex,1:end-1));
-    CGMMovingMean = movmean(cgmSeries(rowIndex,1:end-1), [length(cgmSeries(rowIndex,1:end-1)) 0]);
-    CGMMovingMeanQuantiles = quantile(CGMMovingMean, [0.25, 0.5, 0.75]);
+%Pre Processing of the data
+
+cgmSeriesProcessed = cgmSeries(:, 1:31);
+cgmDateNumProcessed = cgmTime(:, 1:31);
+
+[cgmSeriesProcessed, index_to_remove] = rmmissing(cgmSeriesProcessed, 'MinNumMissing', round(31/4));
+
+cgmDateNumProcessed = cgmTime(not(index_to_remove), :);
+
+
+% If number of missing values less than 31/4, fill those
+
+cgmSeriesProcessed = fillmissing(cgmSeriesProcessed, 'linear');
+
+
+cgmDateNumProcessed = flip(flip(cgmDateNumProcessed,1),2);
+cgmSeriesProcessed = flip(flip(cgmSeriesProcessed,1),2);
+
+featureMatrix = [];
+numMaxPoints = 4;
+
+
+for rowIndex = 1:size(cgmSeriesProcessed, 1)
     
+    % CGM Velocity
+    cgmRow = cgmSeriesProcessed(rowIndex, :);
+    cgmDiffValues = [0 cgmRow(2:end) - cgmRow(1:end-1)];
+    cgmDiffMaxSort = sort(cgmDiffValues, 'descend');
+    cgmDiffMaxValues = cgmDiffMaxSort(:, 1:numMaxPoints);
     
-    cgmRMS = rms(cgmSeries(rowIndex,(1:end-1)));
+    % Moving RMS Velocity
+    cgmRmsMoving =  sqrt(movmean(cgmRow .^ 2, 5));
+    minRMS = min(cgmRmsMoving);
+    maxRMS = max(cgmRmsMoving);
+    medianRMS = median(cgmRmsMoving);
     
-    cgmSkewness = skewness(cgmSeries(rowIndex,(1:end-1)));
+    % Discrete Wavelet Transform
+    cgmDWT = dwt(cgmRow, 'sym4');
+    cgmDWTMaxValues = sort(cgmDWT, 'descend');
+    cgmDWTMaxValues = cgmDWTMaxValues(:, 1:numMaxPoints);
     
-    polynomial_coeff = 4;
+    % Power Spectral Density
+    cgmFFT = abs(fft(cgmRow));
+    N = length(cgmFFT);
+    psdx = (1/(2*pi*N)) * abs(cgmFFT(1:N/2+1)).^2;
+    psdx(2:end-1) = 2*psdx(2:end-1);
+    freq = 0:(2*pi)/N:pi;
+    psdx = 10*log10(psdx);
+    psdxValues = sort(psdx, 'descend');
+    psdxValues = psdx(:, 1:numMaxPoints); 
     
-%     disp(size(cgmSeries(rowIndex, :)))
-    times = [1:size(cgmSeries(rowIndex, :), 2)];
-%     disp(times)
-    cgmPolyfit = polyfit(0.035*(times), flip(cgmSeries(rowIndex, :)), polynomial_coeff);
-    
-    featureVector = [CGMMovingMeanQuantiles cgmRMS cgmSkewness cgmPolyfit];
+    featureVector = [cgmDiffMaxValues minRMS medianRMS maxRMS cgmDWTMaxValues psdxValues];
     featureMatrix = [featureMatrix; featureVector];
     
 end
+
 
 normed_feature_matrix = normalize(featureMatrix, 'norm', 1);
 
@@ -34,4 +69,6 @@ normed_feature_matrix = normalize(featureMatrix, 'norm', 1);
 [coeff, score] = pca(normed_feature_matrix);
 
 top_Eigens = coeff(:, 1:5);
-upatedFatures = normed_feature_matrix*top_Eigens;
+updatedFeatures = normed_feature_matrix*top_Eigens;
+
+plot(updatedFeatures(1,:));
