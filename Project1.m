@@ -15,7 +15,7 @@ cgmDateNumProcessed = cgmTime(not(index_to_remove), :);
 
 % If number of missing values less than 31/4, fill those
 
-cgmSeriesProcessed = fillmissing(cgmSeriesProcessed, 'linear');
+% cgmSeriesProcessed = fillmissing(cgmSeriesProcessed, 'linear');
 
 
 cgmDateNumProcessed = flip(flip(cgmDateNumProcessed,1),2);
@@ -26,18 +26,19 @@ numMaxPoints = 4;
 
 
 for rowIndex = 1:size(cgmSeriesProcessed, 1)
+
     
     % CGM Velocity
     cgmRow = cgmSeriesProcessed(rowIndex, :);
-    cgmDiffValues = [0 cgmRow(2:end) - cgmRow(1:end-1)];
+    cgmtime = cgmDateNumProcessed(rowIndex, :);
+    cgmDiffValues = [0 cgmRow(1:end-1) - cgmRow(2:end)];
     cgmDiffMaxSort = sort(cgmDiffValues, 'descend');
     cgmDiffMaxValues = cgmDiffMaxSort(:, 1:numMaxPoints);
     
     % Moving RMS Velocity
     cgmRmsMoving =  sqrt(movmean(cgmRow .^ 2, 5));
-    minRMS = min(cgmRmsMoving);
-    maxRMS = max(cgmRmsMoving);
-    medianRMS = median(cgmRmsMoving);
+    rmsValues = sort(cgmRmsMoving, 'descend');
+    cgmRmsMaxValues = rmsValues(:, 1: numMaxPoints);
     
     % Discrete Wavelet Transform
     cgmDWT = dwt(cgmRow, 'sym4');
@@ -54,7 +55,7 @@ for rowIndex = 1:size(cgmSeriesProcessed, 1)
     psdxValues = sort(psdx, 'descend');
     psdxValues = psdx(:, 1:numMaxPoints); 
     
-    featureVector = [cgmDiffMaxValues minRMS medianRMS maxRMS cgmDWTMaxValues psdxValues];
+    featureVector = [cgmDiffMaxValues cgmRmsMaxValues cgmDWTMaxValues psdxValues];
     featureMatrix = [featureMatrix; featureVector];
     
 end
@@ -71,4 +72,10 @@ normed_feature_matrix = normalize(featureMatrix, 'norm', 1);
 top_Eigens = coeff(:, 1:5);
 updatedFeatures = normed_feature_matrix*top_Eigens;
 
-plot(updatedFeatures(1,:));
+
+for rowIndex = 1:length(coeff)
+    subplot(4,5,rowIndex)
+    plot(coeff(:, rowIndex))
+    title(['Principal Component- ' num2str(rowIndex)]);
+end
+
