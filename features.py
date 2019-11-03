@@ -1,6 +1,7 @@
 import numpy as np
 import pywt
 from numpy.fft import fft
+from sklearn.decomposition import PCA
 
 
 class Features:
@@ -8,6 +9,8 @@ class Features:
         self.df = data_frame
         self.feature_matrix = []
         self.max_points_per_series = 4
+        self.pca = None
+        self.decomposed_feature_matrix = None
 
     def compute_features(self):
         for idx, row in self.df.iterrows():
@@ -53,6 +56,13 @@ class Features:
         self.feature_matrix = np.array(self.feature_matrix)
         self.feature_matrix /= self.feature_matrix.sum(axis=1)[:, np.newaxis]
         self.feature_matrix = self.feature_matrix.tolist()
+
+    def pca_decomposition(self):
+        self.pca = PCA(n_components=5, random_state=43)
+        self.decomposed_feature_matrix = self.pca.fit_transform(self.feature_matrix)
+        return self.decomposed_feature_matrix
+
+
 
 
 
