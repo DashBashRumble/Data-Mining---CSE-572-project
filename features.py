@@ -47,8 +47,8 @@ class Features:
             cgm_fft.sort(reverse=True)
 
             feature_vector += cgm_fft[:self.max_points_per_series]
-
-            self.feature_matrix.append(feature_vector)
+            if not np.isnan(feature_vector).any():
+                self.feature_matrix.append(feature_vector)
 
         self.normalize_features()
 
