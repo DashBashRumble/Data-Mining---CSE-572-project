@@ -52,6 +52,9 @@ class Features:
 
         self.normalize_features()
 
+    def get_features(self):
+        return self.feature_matrix
+
     def normalize_features(self):
         self.feature_matrix = np.array(self.feature_matrix)
         self.feature_matrix /= self.feature_matrix.sum(axis=1)[:, np.newaxis]
