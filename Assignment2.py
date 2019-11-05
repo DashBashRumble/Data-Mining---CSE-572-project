@@ -9,5 +9,6 @@ clf = Classification('LogReg', x, y)
 clf.get_classifier_object()
 clf.get_metrics()
 
-
-
+clf = Classification('DeciTree', x, y)
+clf.get_classifier_object()
+clf.get_metrics()

@@ -1,4 +1,5 @@
 from LogisticRegression import LogReg
+from DecisionTree import DecisionTree
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import f1_score
 from sklearn.metrics import accuracy_score
@@ -26,6 +27,10 @@ class Classification:
     def get_classifier_object(self):
         if self.classifier_name == 'LogReg':
             self.clf = LogReg(self.x_train, self.y_train, self.x_test, self.y_test)
+            self.clf.train()
+            self.y_pred = self.clf.predict()
+        elif self.classifier_name == 'DeciTree' :
+            self.clf = DecisionTree(self.x_train, self.y_train, self.x_test, self.y_test)
             self.clf.train()
             self.y_pred = self.clf.predict()
 
