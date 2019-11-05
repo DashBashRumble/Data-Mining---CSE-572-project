@@ -20,8 +20,8 @@ class Classification:
         self.y_pred = None
 
     def test_train_split(self):
-        self.x_train, self.x_test, self.y_train, self.y_test = train_test_split(self.x, self.y,
-                                                                                test_size=0.4, shuffle=True)
+        self.x_train, self.x_test, self.y_train, self.y_test = train_test_split(self.x, self.y, test_size=0.4,
+                                                                                shuffle=True, random_state=43)
 
     def get_classifier_object(self):
         if self.classifier_name == 'LogReg':
