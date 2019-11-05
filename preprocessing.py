@@ -36,5 +36,5 @@ class Preprocess:
         self.df.reset_index(drop=True, inplace=True)
         # self.df = self.df.interpolate(method="linear", limit_direction='backward', axis=0)
         self.df = self.df.bfill(axis=1)
-        print(self.df.info())
+        # print(self.df.info())
 
