@@ -6,6 +6,8 @@ from sklearn.metrics import accuracy_score
 from sklearn.metrics import precision_score
 from sklearn.metrics import recall_score
 
+from sklearn.metrics import classification_report, confusion_matrix
+
 
 class Classification:
     def __init__(self, classifier_name, data, labels):
@@ -33,12 +35,20 @@ class Classification:
             self.clf = DecisionTree(self.x_train, self.y_train, self.x_test, self.y_test)
             self.clf.train()
             self.y_pred = self.clf.predict()
+        elif self.classifier_name == 'svm' :
+            self.clf = DecisionTree(self.x_train, self.y_train, self.x_test, self.y_test)
+            self.clf.train()
+            self.y_pred = self.clf.predict()
 
     def get_metrics(self):
+        print('classifier'+self.classifier_name)
         print('Accuracy score', accuracy_score(self.y_test, self.y_pred))
         print('Precision', precision_score(self.y_test, self.y_pred))
         print('Recall', recall_score(self.y_test, self.y_pred))
         print('F1 score', f1_score(self.y_test, self.y_pred))
+        # print('confusion matrix')
+        # print(confusion_matrix(self.y_test, self.y_pred))
+        # print(classification_report(self.y_test, self.y_pred))
 
 
 
