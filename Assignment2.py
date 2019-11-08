@@ -16,3 +16,7 @@ clf.get_metrics()
 clf = Classification('svm', x, y)
 clf.get_classifier_object()
 clf.get_metrics()
+
+clf = Classification('RForest', x, y)
+clf.get_classifier_object()
+clf.get_metrics()

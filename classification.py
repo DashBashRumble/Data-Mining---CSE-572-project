@@ -1,5 +1,7 @@
 from LogisticRegression import LogReg
 from DecisionTree import DecisionTree
+from SVM import SVM
+from RandomForest import RandomForest
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import f1_score
 from sklearn.metrics import accuracy_score
@@ -31,12 +33,16 @@ class Classification:
             self.clf = LogReg(self.x_train, self.y_train, self.x_test, self.y_test)
             self.clf.train()
             self.y_pred = self.clf.predict()
-        elif self.classifier_name == 'DeciTree' :
+        elif self.classifier_name == 'DeciTree':
             self.clf = DecisionTree(self.x_train, self.y_train, self.x_test, self.y_test)
             self.clf.train()
             self.y_pred = self.clf.predict()
-        elif self.classifier_name == 'svm' :
-            self.clf = DecisionTree(self.x_train, self.y_train, self.x_test, self.y_test)
+        elif self.classifier_name == 'svm':
+            self.clf = SVM(self.x_train, self.y_train, self.x_test, self.y_test)
+            self.clf.train()
+            self.y_pred = self.clf.predict()
+        elif self.classifier_name == 'RForest':
+            self.clf = RandomForest(self.x_train, self.y_train, self.x_test, self.y_test)
             self.clf.train()
             self.y_pred = self.clf.predict()
 

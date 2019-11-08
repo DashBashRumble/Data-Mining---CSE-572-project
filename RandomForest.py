@@ -1,8 +1,9 @@
-from sklearn.svm import SVC
+from sklearn.ensemble import RandomForestClassifier
 
-class SVM_test:
+
+class RandomForest:
     def __init__(self, x_train, y_train, x_test, y_test):
-        self.clf = SVC(kernel='linear')
+        self.clf = RandomForestClassifier(n_estimators=100)
         self.x_train = x_train
         self.y_train = y_train
         self.x_test = x_test
