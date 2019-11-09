@@ -4,8 +4,8 @@ from sklearn.model_selection import GridSearchCV
 
 class SVM:
     def __init__(self, x_train, y_train, x_test, y_test):
-        self.clf = SVC(kernel='linear')
-        self.grid_search_params = {'gamma': ['auto', 'scale']}
+        self.clf = SVC()
+        self.grid_search_params = {'kernel': ['linear', 'rbf', 'poly'], 'gamma': ['auto', 'scale']}
         self.clf = GridSearchCV(self.clf, self.grid_search_params, cv=10)
         self.x_train = x_train
         self.y_train = y_train
