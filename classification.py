@@ -2,6 +2,8 @@ from LogisticRegression import LogReg
 from DecisionTree import DecisionTree
 from SVM import SVM
 from RandomForest import RandomForest
+from XGBoostClassifier import XGBoost
+from AdaBoostClassifier import AdaBoost
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import f1_score
 from sklearn.metrics import accuracy_score
@@ -25,7 +27,7 @@ class Classification:
         self.y_pred = None
 
     def test_train_split(self):
-        self.x_train, self.x_test, self.y_train, self.y_test = train_test_split(self.x, self.y, test_size=0.4,
+        self.x_train, self.x_test, self.y_train, self.y_test = train_test_split(self.x, self.y, test_size=0.3,
                                                                                 shuffle=True, random_state=43)
 
     def get_classifier_object(self):
@@ -45,9 +47,17 @@ class Classification:
             self.clf = RandomForest(self.x_train, self.y_train, self.x_test, self.y_test)
             self.clf.train()
             self.y_pred = self.clf.predict()
+        elif self.classifier_name == 'XGB':
+            self.clf = XGBoost(self.x_train, self.y_train, self.x_test, self.y_test)
+            self.clf.train()
+            self.y_pred = self.clf.predict()
+        elif self.classifier_name == 'AdaBoost':
+            self.clf = AdaBoost(self.x_train, self.y_train, self.x_test, self.y_test)
+            self.clf.train()
+            self.y_pred = self.clf.predict()
 
     def get_metrics(self):
-        print('classifier'+self.classifier_name)
+        print('classifier:', self.classifier_name)
         print('Accuracy score', accuracy_score(self.y_test, self.y_pred))
         print('Precision', precision_score(self.y_test, self.y_pred))
         print('Recall', recall_score(self.y_test, self.y_pred))
