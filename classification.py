@@ -4,6 +4,7 @@ from SVM import SVM
 from RandomForest import RandomForest
 from XGBoostClassifier import XGBoost
 from AdaBoostClassifier import AdaBoost
+from NaiveBayes import NaiveBayes
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import f1_score
 from sklearn.metrics import accuracy_score
@@ -55,10 +56,19 @@ class Classification:
             self.clf = XGBoost(self.x_train, self.y_train, self.x_test, self.y_test)
             self.clf.train()
             self.y_pred = self.clf.predict()
+        elif self.classifier_name == 'NaiveBayes':
+            self.clf = NaiveBayes(self.x_train, self.y_train, self.x_test, self.y_test)
+            self.clf.train()
+            self.y_pred = self.clf.predict()
         elif self.classifier_name == 'AdaBoost':
             self.clf = AdaBoost(self.x_train, self.y_train, self.x_test, self.y_test)
             self.clf.train()
             self.y_pred = self.clf.predict()
+
+        return self.clf.get_classifier()
+
+    def get_classifier(self):
+        return self.clf.get_classifier()
 
     def get_metrics(self):
         print('classifier:', self.classifier_name)
