@@ -22,7 +22,8 @@ def get_data():
         meal_df = preprocess_obj.get_dataframe()
         meal_features = Features(meal_df)
         meal_features.compute_features()
-        temp_meal_features = meal_features.pca_decomposition().tolist()
+        # temp_meal_features = meal_features.pca_decomposition().tolist()
+        temp_meal_features = meal_features.get_features()
         labels += [1]*len(temp_meal_features)
 
         preprocess_obj_ = Preprocess(no_meal_data_file)
@@ -30,7 +31,8 @@ def get_data():
         no_meal_features = Features(no_meal_df)
         no_meal_features.compute_features()
         no_meal_features_ = no_meal_features.get_features()
-        no_meal_final_features = meal_features.pca.transform(no_meal_features_).tolist()
+        # no_meal_final_features = meal_features.pca.transform(no_meal_features_).tolist()
+        no_meal_final_features = no_meal_features_
         labels += [0]*len(no_meal_features_)
 
         for no_meal_feature in no_meal_final_features:
