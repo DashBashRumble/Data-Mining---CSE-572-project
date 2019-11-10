@@ -13,6 +13,9 @@ class SVM:
         self.y_Test = y_test
         self.y_pred = None
 
+    def get_classifier(self):
+        return self.clf
+
     def train(self):
         self.clf.fit(self.x_train, self.y_train)
 
