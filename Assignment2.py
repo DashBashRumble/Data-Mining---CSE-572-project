@@ -11,7 +11,7 @@ test_file_dataframe = preprocess_obj.get_dataframe()
 test_file_features_obj = Features(test_file_dataframe)
 test_file_features_obj.compute_features()
 test_file_features = test_file_features_obj.get_features()
-print(len(test_file_features))
+# print(len(test_file_features))
 
 # Random Forest
 random_forest_clf = pickle.load(open('RForest_model.pkl', 'rb'))

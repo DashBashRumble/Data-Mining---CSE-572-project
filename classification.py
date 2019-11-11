@@ -1,6 +1,6 @@
-from LogisticRegression import LogReg
-from DecisionTree import DecisionTree
-from SVM import SVM
+# from LogisticRegression import LogReg
+# from DecisionTree import DecisionTree
+# from SVM import SVM
 from RandomForest import RandomForest
 from XGBoostClassifier import XGBoost
 from AdaBoostClassifier import AdaBoost
@@ -36,19 +36,19 @@ class Classification:
                                                                                 shuffle=True, random_state=43)
 
     def get_classifier_object(self):
-        if self.classifier_name == 'LogReg':
-            self.clf = LogReg(self.x_train, self.y_train, self.x_test, self.y_test)
-            self.clf.train()
-            self.y_pred = self.clf.predict()
-        elif self.classifier_name == 'DeciTree':
-            self.clf = DecisionTree(self.x_train, self.y_train, self.x_test, self.y_test)
-            self.clf.train()
-            self.y_pred = self.clf.predict()
-        elif self.classifier_name == 'svm':
-            self.clf = SVM(self.x_train, self.y_train, self.x_test, self.y_test)
-            self.clf.train()
-            self.y_pred = self.clf.predict()
-        elif self.classifier_name == 'RForest':
+        # if self.classifier_name == 'LogReg':
+        #     self.clf = LogReg(self.x_train, self.y_train, self.x_test, self.y_test)
+        #     self.clf.train()
+        #     self.y_pred = self.clf.predict()
+        # elif self.classifier_name == 'DeciTree':
+        #     self.clf = DecisionTree(self.x_train, self.y_train, self.x_test, self.y_test)
+        #     self.clf.train()
+        #     self.y_pred = self.clf.predict()
+        # elif self.classifier_name == 'svm':
+        #     self.clf = SVM(self.x_train, self.y_train, self.x_test, self.y_test)
+        #     self.clf.train()
+        #     self.y_pred = self.clf.predict()
+        if self.classifier_name == 'RForest':
             self.clf = RandomForest(self.x_train, self.y_train, self.x_test, self.y_test)
             self.clf.train()
             self.y_pred = self.clf.predict()
